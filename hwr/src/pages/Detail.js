@@ -35,25 +35,17 @@ class Detail extends React.Component {
 
     return (
       <div>
-        <button onClick={this.showCommits.bind(this)}>Show Commits</button>
-        <button onClick={this.showPulls.bind(this)}>Show Pulls</button>
-        <button onClick={this.showForks.bind(this)}>Show Forks</button>
+        <button onClick={this.selectMode.bind(this,'commits')}>Show Commits</button>
+        <button onClick={this.selectMode.bind(this,'pulls')}>Show Pulls</button>
+        <button onClick={this.selectMode.bind(this,'forks')}>Show Forks</button>
         {content}
       </div>
 
       )
   }
 
-  showCommits() {
-    this.setState({mode:'commits'});
-  }
-
-  showPulls() {
-    this.setState({mode:'pulls'});
-  }
-
-  showForks() {
-    this.setState({mode: 'forks'});
+  selectMode(mode) {
+    this.setState({mode});
   }
 
 
@@ -95,35 +87,22 @@ class Detail extends React.Component {
 
       })
   }
+
   componentWillMount() {
+    this.fetchFeed('commits');
+    this.fetchFeed('pulls');
+    this.fetchFeed('forks')
+  }
+
+  fetchFeed(type) {
     ajax
-      .get('https://api.github.com/repos/facebook/react/commits')
+      .get(`https://api.github.com/repos/facebook/react/${type}`)
       .end((error, response) => {
         if( !error && response) {
           console.dir(response.body);
-          this.setState({commits: response.body});
+          this.setState({[type]: response.body});
         } else {
-          console.log("There was an error fethching from github", error);
-        }
-      });
-    ajax
-      .get('https://api.github.com/repos/facebook/react/forks')
-      .end((error, response) => {
-        if( !error && response) {
-          console.dir(response.body);
-          this.setState({forks: response.body});
-        } else {
-          console.log("There was an error fethching from github", error);
-        }
-      });
-    ajax
-      .get('https://api.github.com/repos/facebook/react/pulls')
-      .end((error, response) => {
-        if( !error && response) {
-          console.dir(response.body);
-          this.setState({pulls: response.body});
-        } else {
-          console.log("There was an error fethching from github", error);
+          console.log(`There was an error fethching ${type} from github`, error);
         }
       });
   }
