@@ -25,7 +25,7 @@ const NoMatch =({match}) => (
     <Link to="/">Go Home Boy </Link>
   </div>
 );
-ReactDom.render (
+ReactDOM.render (
   <Root/>,
   document.getElementById('app')
 )
