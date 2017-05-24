@@ -22,7 +22,7 @@ const Root = () => {
     <Router >
       <Switch>
         <Route exact path="/" component={List}/>
-        <Route exact path="/detail" component={Detail}/>
+        <Route exact path="/detail/:repo" component={Detail}/>
         <Route component={NoMatch}/>
       </Switch>
     </Router>
